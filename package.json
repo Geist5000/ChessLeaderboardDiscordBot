@@ -1,0 +1,17 @@
+{
+  "name": "chesstracker",
+  "version": "1.0.0",
+  "description": "Does count the ranking of the chess player from one server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Geist5000",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "mysql": "^2.18.1"
+  }
+}
