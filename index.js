@@ -133,7 +133,7 @@ async function getScoreboardDescription(server_id) {
             row = index.toString();
             prevIndex = index;
         }
-        row += ".   \t<@" + s.user_id + ">   (" + s.score + ")";
+        row += ".   \t<@" + s.user_id + ">   (" + s.score + " P.)";
         prevScore = s.score;
         index++;
         return row;
