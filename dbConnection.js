@@ -52,7 +52,7 @@ class ChessRepository {
                     "    ON UPDATE CASCADE)\n" +
                     "ENGINE = InnoDB",
                     defaultErrorHandler(() => {
-                        this.con.query("CREATE  OR REPLACE VIEW `scores_view` AS SELECT game_id,winner_id as user_id,sum(CASE WHEN `remis`=0 THEN 3 ELSE 1 END) as score FROM `scores` GROUP BY `winner_id`,`game_id`;",
+                        this.con.query("CREATE  OR REPLACE VIEW `scores_view` AS SELECT t.game_id,t.user_id,sum(CASE WHEN `t`.`remis`=0 THEN 3 ELSE 1 END) as score FROM (SELECT game_id,winner_id as user_id,remis FROM `scores` UNION ALL SELECT game_id,loser_id as user_id,remis FROM `scores` where remis = True)as t GROUP BY game_id,user_id;",
                             defaultErrorHandler(() => console.log("Tables created!")));
                     }))
             }));
@@ -88,10 +88,7 @@ class ChessRepository {
 
     addResult(gameId, winnerId, loserId, remis) {
         const query = "INSERT INTO `scores` (game_id,winner_id,loser_id,remis)VALUES (?,?,?,?);";
-        if(!remis)
-            this.querryAsPromise(query,[gameId,winnerId,loserId,remis]).catch(defaultErrorHandler());
-        else
-            this.querryAsPromise(query,[[gameId,winnerId,null,remis],[gameId,loserId,null,remis]]).catch(defaultErrorHandler());
+        this.querryAsPromise(query,[gameId,winnerId,loserId,remis]).catch(defaultErrorHandler());
     }
 
     getScoresOfServer(serverId){
