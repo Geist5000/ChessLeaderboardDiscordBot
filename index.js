@@ -58,6 +58,20 @@ const commands = [
                 msg.channel.send("There is already a Leaderboard!");
             }
         }
+    },
+    {
+        cmds:["refreshScores"],
+        callback: async function(msg,arguments){
+            const game = await repository.getServer(msg.guild.id);
+            if (game !== undefined) {
+                if(arguments.length === 0){
+                    await updateScoreboardMessage(game,msg.channel);
+                    msg.delete();
+                } else {
+                    msg.channel.send("Wrong arguments!");
+                }
+            }
+        }
     }
 ];
 
