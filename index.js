@@ -8,35 +8,45 @@ const commands = [
         cmds: ["addResult"],
         callback: async function (msg, arguments) {
             const game = await repository.getServer(msg.guild.id);
-            if (game !== undefined) {
-                if (msg.channel.id === game.scoreboard_channel_id) {
-                    if (arguments.length === 2) {
-                        let uIds = undefined;
-                        try {
-                            uIds = arguments.map((a) => {
-                                if (a.startsWith("<@") && a.endsWith(">")) {
-                                    a = a.slice(2, -1);
-                                    if (a.startsWith("!")) {
-                                        a = a.slice(1);
-                                    }
-                                    return a;
-                                } else {
-                                    throw "No valid user Mention!";
-                                }
-                            });
-                        } catch (err) {
-                            msg.channel.send("No valid Users");
-                            return;
-                        }
-                        repository.addResult(game.server_id, uIds[0], uIds[1], false);
-                        await updateScoreboardMessage(game,msg.channel);
-                        msg.delete();
-                    } else {
-                        msg.channel.send("Please use the command in a proper way! " + process.env.PREFIX + "addResult [menition of Winner] [mention of Looser]");
+
+            if (await isValidChannel(game,msg.channel.id)) {
+                if (arguments.length === 2) {
+                    let uIds = undefined;
+                    try {
+                        uIds = convertFromMentionToId(arguments);
+                    } catch (err) {
+                        msg.channel.send("No valid Users");
+                        return;
                     }
+                    repository.addResult(game.server_id, uIds[0], uIds[1], false);
+                    await updateScoreboardMessage(game, msg.channel);
+                    msg.delete();
+                } else {
+                    msg.channel.send("Please use the command in a proper way! " + process.env.PREFIX + "addResult [menition of Winner] [mention of Looser]");
+                }
+            }
+        }
+    }, {
+        cmds: ["addRemis"],
+        callback: async function (msg, arguments) {
+            const game = await repository.getServer(msg.guild.id);
+            if (await isValidChannel(game, msg.channel.id)) {
+                if (arguments.length === 2) {
+                    let uIds = undefined;
+                    try {
+                        uIds = convertFromMentionToId(arguments);
+                    } catch (err) {
+                        msg.channel.send("No valid Users");
+                        return;
+                    }
+                    repository.addResult(game.server_id, uIds[0], uIds[1], true);
+                    await updateScoreboardMessage(game, msg.channel);
+                    msg.delete();
+                } else {
+                    msg.channel.send("Please use the command in a proper way! " + process.env.PREFIX + "addRemis [menition of contestent] [mention of contestent]");
                 }
             } else {
-                msg.channel.send("No Leaderboard, create one with" + process.env.PREFIX + "startChess");
+
             }
         }
     },
@@ -60,12 +70,12 @@ const commands = [
         }
     },
     {
-        cmds:["refreshScores"],
-        callback: async function(msg,arguments){
+        cmds: ["refreshScores"],
+        callback: async function (msg, arguments) {
             const game = await repository.getServer(msg.guild.id);
             if (game !== undefined) {
-                if(arguments.length === 0){
-                    await updateScoreboardMessage(game,msg.channel);
+                if (arguments.length === 0) {
+                    await updateScoreboardMessage(game, msg.channel);
                     msg.delete();
                 } else {
                     msg.channel.send("Wrong arguments!");
@@ -74,6 +84,33 @@ const commands = [
         }
     }
 ];
+
+
+async function isValidChannel(game, channelId) {
+    if (game !== undefined) {
+        return channelId === game.scoreboard_channel_id;
+    }
+
+    return false;
+}
+
+
+function convertFromMentionToId(mentions) {
+
+    return mentions.map((a) => {
+        if (a.startsWith("<@") && a.endsWith(">")) {
+            a = a.slice(2, -1);
+            if (a.startsWith("!")) {
+                a = a.slice(1);
+            }
+            return a;
+        } else {
+            throw "No valid user Mention!";
+        }
+    });
+
+
+}
 
 
 function handleCommand(msg, command) {
@@ -107,7 +144,7 @@ client.on('message', msg => {
 client.login(process.env.token);
 
 
-async function updateScoreboardMessage(game,channel){
+async function updateScoreboardMessage(game, channel) {
     const message = await channel.messages.fetch(game.scoreboard_message_id);
     message.edit(await getScoreBoardMessageEmbed(game.server_id));
 }
