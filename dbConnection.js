@@ -15,7 +15,8 @@ class ChessRepository {
 
     constructor(host, user, password, database) {
         this.serversDirty = false;
-        this.con = mysql.createConnection({
+        this.con = mysql.createPool({
+            connectionLimit : 4,
             host: host,
             user: user,
             password: password,
