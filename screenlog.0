@@ -1,0 +1,28 @@
+
+> chesstracker@1.0.0 start /root/programming/nodejs/ChessLeaderboardDiscordBot
+> node index.js
+
+/root/programming/nodejs/ChessLeaderboardDiscordBot/dbConnection.js:26
+        this.con.connect((err) => {
+                 ^
+
+TypeError: this.con.connect is not a function
+    at new ChessRepository (/root/programming/nodejs/ChessLeaderboardDiscordBot/dbConnection.js:26:18)
+    at Object.<anonymous> (/root/programming/nodejs/ChessLeaderboardDiscordBot/index.js:127:20)
+[90m    at Module._compile (internal/modules/cjs/loader.js:1063:30)[39m
+[90m    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)[39m
+[90m    at Module.load (internal/modules/cjs/loader.js:928:32)[39m
+[90m    at Function.Module._load (internal/modules/cjs/loader.js:769:14)[39m
+[90m    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)[39m
+[90m    at internal/main/run_main_module.js:17:47[39m
+[37;40mnpm[0m [0m[31;40mERR![0m [0m[35mcode[0m ELIFECYCLE
+[0m[37;40mnpm[0m [0m[31;40mERR![0m [0m[35merrno[0m 1
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m chesstracker@1.0.0 start: `node index.js`
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m Exit status 1
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m 
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m Failed at the chesstracker@1.0.0 start script.
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m This is probably not a problem with npm. There is likely additional logging output above.
+[0m
+[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m A complete log of this run can be found in:
+[0m[37;40mnpm[0m [0m[31;40mERR![0m[35m[0m     /root/.npm/_logs/2021-01-05T14_56_50_382Z-debug.log
+[0m

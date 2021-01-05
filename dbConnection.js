@@ -23,10 +23,7 @@ class ChessRepository {
             database: database
         });
 
-        this.con.connect((err) => {
-            if (err) throw err;
-            this.#createTables();
-        })
+        this.#createTables();
     }
 
     #createTables() {

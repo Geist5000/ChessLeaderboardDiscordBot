@@ -1,1 +1,1 @@
-screen -S SchachiBot npm run start > latestLog.log 2>&1
+screen -S SchachiBot -L npm run start
